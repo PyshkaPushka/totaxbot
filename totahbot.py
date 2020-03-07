@@ -33,9 +33,9 @@ def totah(update, context):
       update.message.reply_text("Курцер тотах!")
 
 def food(update, context):
-    if update.message.text.lower()=="кто хочет кушать?":
+    if update.message.text=="кто хочет кушать?":
       update.message.reply_text("Директор Ярославский!")
-    if update.message.text.lower()=="где жрем?":
+    if update.message.text=="где жрем?":
       update.message.reply_text("у Курцера!")
     
 
