@@ -23,11 +23,18 @@ def help(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text('Help!')
 
+def dubina(update, context):
+    if any(text in update.message.text for text in ["дубина", "дубинко", "dubina"]):
+        update.message.reply_text("Так это же Курцер!!!")
 
-def kurtzeri(update, context):
+
+def kurtzerovna(update, context):
     if any(text in update.message.text for text in ["Курцеровна", "курцеровна"]):
         update.message.reply_text("Курцеровна всегда права!")
-    elif any(text in update.message.text for text in ["Курцер ", "курцер "]):
+
+
+def totah(update, context):
+    if any(text in update.message.text for text in ["Курцер", "курцер"]):
       update.message.reply_text("Курцер тотах!")
 
 
@@ -51,7 +58,7 @@ def main():
     dp.add_handler(CommandHandler("help", help))
 
     # on noncommand i.e message - echo the message on Telegram
-    dp.add_handler(MessageHandler(Filters.text, kurtzeri))
+    dp.add_handler(MessageHandler(Filters.text, totah, dubina, kurtzerovna))
 
     # log all errors
     dp.add_error_handler(error)
