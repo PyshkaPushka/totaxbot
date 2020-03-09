@@ -27,7 +27,7 @@ def help(update, context):
 def kurtzeri(update, context):
     if any(text in update.message.text for text in ["Курцеровна", "курцеровна"]):
         update.message.reply_text("Курцеровна всегда права!")
-    elif any(text in update.message.text for text in ["Курцер ", "курцер " ]):
+    elif any(text in update.message.text for text in ["Курцер ", "курцер "]):
       update.message.reply_text("Курцер тотах!")
 
 
