@@ -5,13 +5,6 @@ import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-from watchgod import run_process
-
-
-
-
-
-
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -25,10 +18,6 @@ def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('Hi!')
 
-def stop(update, context):
-    """Send a message when the command /start is issued."""
-    update.message.reply_text('иди потрогай Стаса животик')
-
 
 def help(update, context):
     """Send a message when the command /help is issued."""
@@ -38,13 +27,6 @@ def help(update, context):
 def totah(update, context):
     if any(text in update.message.text for text in ["Курцер", "курцер"]):
       update.message.reply_text("Курцер тотах!")
-
-def food(update, context):
-    if update.message.text=="кто хочет кушать?":
-      update.message.reply_text("Директор Ярославский!")
-    if update.message.text=="где жрем?":
-      update.message.reply_text("у Курцера!")
-    
 
 
 def error(update, context):
@@ -65,12 +47,10 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
-    dp.add_handler(CommandHandler("stop", stop))
-
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, totah))
-    dp.add_handler(MessageHandler(Filters.text, food))
+
     # log all errors
     dp.add_error_handler(error)
 
@@ -82,10 +62,6 @@ def main():
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
-  
 
 if __name__ == '__main__':
-
-    run_process('./', main, args=())
- 
-
+    main()
