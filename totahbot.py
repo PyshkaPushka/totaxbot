@@ -5,6 +5,13 @@ import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
+from watchgod import run_process
+
+
+
+
+
+
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -75,7 +82,10 @@ def main():
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
+  
 
 if __name__ == '__main__':
-    main()
+
+    run_process('./', main, args=())
+ 
 

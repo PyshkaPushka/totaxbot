@@ -1,8 +1,20 @@
 import requests
 import os
+import time
+
 import json
 
+def find_console_id(content):
+   console_id=""
+   if isinstance(content, list): 
+      for d in content: 
+          for k, v in d.items(): 
+             if k=='id':
+                 console_id=v
+   elif isinstance(content, dict): 
+      console_id=content.get("id")
 
+   return console_id
 
 
 pythonanywhere_key= os.environ['PYTHON_API_KEY']
@@ -22,26 +34,3 @@ response = requests.request("POST", url, headers=headers, data = payload, files 
 
 print(response.content)
 
-
-
-response = requests.request("GET", "https://www.pythonanywhere.com/api/v0/user/totahbot/consoles/", headers=headers, data = payload)
-
-
-input_dict = json.loads(response.content)
-
-output_dict = [x for x in input_dict if x['name'] == 'dev_console']
-
-
-
-for d in output_dict: 
-    for k, v in d.items(): 
-        if k=='id':
-           console_id=v
-
-
-print(console_id)
-
-
-response = requests.request("GET", "https://www.pythonanywhere.com/api/v0/user/totahbot/consoles/"+str(console_id), headers=headers, data = payload)
-
-print(response.content)
