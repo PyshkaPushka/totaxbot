@@ -25,12 +25,13 @@ def help(update, context):
 
 
 def totah(update, context):
-    if any(text in update.message.text for text in ["Курцер", "курцер"]):
+    if any(text in update.message.text for text in ["Курцер ", "курцер "]):
       update.message.reply_text("Курцер тотах!")
 
 def totahiha(update, context):
     if any(text in update.message.text for text in ["Курцеровна", "курцеровна"]):
       update.message.reply_text("Курцеровна всегда права!")
+
 
 def error(update, context):
     """Log Errors caused by Updates."""
