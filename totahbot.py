@@ -34,7 +34,7 @@ def kurtzerovna(update, context):
 
 
 def totah(update, context):
-    if any(text in update.message.text for text in ["Курцер", "курцер"]):
+    if any(text in update.message.text for text in ["Курцер ", "курцер "]):
       update.message.reply_text("Курцер тотах!")
 
 
