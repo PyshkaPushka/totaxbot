@@ -24,13 +24,11 @@ def help(update, context):
     update.message.reply_text('Help!')
 
 
-def totah(update, context):
-    if any(text in update.message.text for text in ["Курцер ", "курцер "]):
-      update.message.reply_text("Курцер тотах!")
-
-def totahiha(update, context):
+def kurtzeri(update, context):
     if any(text in update.message.text for text in ["Курцеровна", "курцеровна"]):
-      update.message.reply_text("Курцеровна всегда права!")
+        update.message.reply_text("Курцеровна всегда права!")
+    elif any(text in update.message.text for text in ["Курцер ", "курцер " ]):
+      update.message.reply_text("Курцер тотах!")
 
 
 def error(update, context):
@@ -53,7 +51,7 @@ def main():
     dp.add_handler(CommandHandler("help", help))
 
     # on noncommand i.e message - echo the message on Telegram
-    dp.add_handler(MessageHandler(Filters.text, totah))
+    dp.add_handler(MessageHandler(Filters.text, kurtzeri))
 
     # log all errors
     dp.add_error_handler(error)
