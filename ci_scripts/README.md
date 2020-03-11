@@ -1,8 +1,9 @@
 # CI script
 
-In order to use this script correctly, you need to set wto env variable:
+In order to use that script correctly, you need to set two env variables:
 
-FILE_PATH - full file path to bot file you wuld like to upload to pythonanywere
-PYTHON_API_KEY - API key for pythoanywere access
+- FILE_PATH - The full path to bot python file you would like to upload to pythonanywere.com
 
-Please note, the uploaded bot should contain fully working code with telegram toke for TotahBotDev
+- PYTHON_API_KEY - API key for access the pythoanywere.com
+
+Please note, the uploaded file should contain fully working code with telegram token for TotahBotDev.
