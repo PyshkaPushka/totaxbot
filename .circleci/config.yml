@@ -13,8 +13,7 @@
        - image: circleci/ruby:2.4.1
      steps:
        - checkout
-       - run: pip install python-telegram-bot --upgrade
-              python totahbot.py
+       - run: echo "A second hello"
        
  
        
