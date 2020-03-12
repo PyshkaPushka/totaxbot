@@ -1,8 +1,21 @@
  version: 2
  jobs:
+ one:
    build:
      docker:
        - image: circleci/ruby:2.4.1
      steps:
        - checkout
        - run: echo "A first hello"
+ two:
+   build:
+     docker:
+       - image: circleci/ruby:2.4.1
+     steps:
+       - checkout
+       - run: pip install python-telegram-bot --upgrade
+              sed -i -e 's/<secret-token>/the-real-secret-token/g' totahbot.py    
+              python totahbot.py
+       
+ 
+       
