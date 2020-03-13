@@ -22,7 +22,7 @@ for changes in watch('./'):
       p.terminate()
       time.sleep(10)
       if p.poll() == None:
-          print("The process is still alive.Kill him!")
+          print("The process is still alive. Kill it!")
           p.kill()
           time.sleep(5)
       print("stoped")
