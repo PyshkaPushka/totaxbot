@@ -20,10 +20,11 @@ for changes in watch('./'):
    if any([ './'+filename in i for i in changes]):
       print("stoping!")
       p.terminate()
-      time.sleep(10)
-      if p.poll() == None:
+      try:
+        p.wait(timeout=10)
+      except subprocess.TimeoutExpired:
           print("The process is still alive.Kill him!")
           p.kill()
-          time.sleep(5)
+      time.sleep(5) 
       print("stoped")
       p=Popen(['python3', filename,token])
