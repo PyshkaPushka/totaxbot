@@ -44,8 +44,12 @@ def beria_how_many_spies(context):
 
 
 def beria_who_is_this_spy(username, context):
-    if 'gulag' in context.chat_data and username in context.chat_data['gulag']['usernames']:
-        return context.chat_data['gulag']['usernames'][username]
+    if 'gulag' in context.chat_data:
+        gulag = context.chat_data['gulag']
+        if username in gulag['usernames']:
+            return gulag['usernames'][username]
+    else:
+        beria_postroy_gulag(context)
     return None
 
 
@@ -54,9 +58,10 @@ def beria(update, context):
     id = update.message.from_user.id
     if 'gulag' not in context.chat_data:
         beria_postroy_gulag(context)
-    if username is not None and username not in context.chat_data['gulag']['usernames']:
-        context.chat_data['gulag']['usernames'][username] = update.message.from_user
-    context.chat_data['gulag']['ids'][id] = 1
+    gulag = context.chat_data['gulag']
+    if username is not None and username not in gulag['usernames']:
+        gulag['usernames'][username] = update.message.from_user
+    gulag['ids'][id] = 1
 
 
 def totah(update, context):
@@ -88,15 +93,18 @@ def get_totah_shel_aba(message, context):
 
 def totah_sheli_end_poll(context):
     job = context.job
+    poll_message = job.context['poll_message']
+    user = job.context['user']
+    user_count = job.context['user_count']
 
-    poll = context.bot.stop_poll(job.context['poll_message'].chat_id, job.context['poll_message'].message_id)
+    poll = context.bot.stop_poll(poll_message.chat_id, poll_message.message_id)
     if poll is not None:
         podonki = poll.options[0].voter_count + poll.options[1].voter_count
-        bratva = job.context['user_count']
+        bratva = user_count
         if podonki > bratva/2:
-            apply_totah_level(DEFAULT_TOTAH_LEVEL, job.context['user'], job.context['poll_message'], context, additional_text='Tak решили {0} подонков из {1}!'.format(podonki, bratva))
+            apply_totah_level(DEFAULT_TOTAH_LEVEL, user, poll_message, context, additional_text='Tak решили {0} подонков из {1}!'.format(podonki, bratva))
     else:
-        job.context['poll_message'].reply_text('Демократии конец, и ты сосёшь хуец!')
+        poll_message.reply_text('Демократии конец, и ты сосёшь хуец!')
 
 
 def totah_sheli_command(update, context):
