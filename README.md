@@ -1,9 +1,11 @@
 # TotahBot
 
-    $ pip install python-telegram-bot --upgrade
-    $ python totahbot.py <BotToken>
+    $ pip3 install python-telegram-bot watchgod --upgrade
+    $ python3 totahbot.py <BotToken>
+    To run with autoupdating watchdog:
+    $ python3 watchdog.py totahbot.py <BotToken>
     
-For commands to work, the following conditions must be met:
+For Bot commands to work, the following conditions must be met:
 1. The group must be a supergroup which means that **at least one** the following conditions must be met:
    - Changing group type to public
    - Changing group chat history visibility

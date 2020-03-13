@@ -1,2 +1,0 @@
-watchgod
-python-telegram-bot
