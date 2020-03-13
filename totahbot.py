@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import logging, datetime, re
+import logging, datetime, re, sys
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram import ChatPermissions, MessageEntity
+from pollhandler import PollHandler
 
 DEFAULT_TOTAH_LEVEL = 60
-
-gulag = {}
+POLL_TIME = 5
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -29,16 +29,31 @@ def help(update, context):
     update.message.reply_text('Можешь попробовать:\n\t/totah <сколько балов>\n\t/totahsheli <@ми тотах шель аба>\n')
 
 
-def beria_who_is_this_spy(username):
-    if username in gulag:
-        return gulag[username]
+def beria_postroy_gulag(context):
+    context.chat_data['gulag'] = {'ids': {}, 'usernames': {}}
+
+
+def beria_how_many_spies(context):
+    if 'gulag' in context.chat_data:
+        return len(context.chat_data['gulag']['ids'])
+    beria_postroy_gulag(context)
+    return 0
+
+
+def beria_who_is_this_spy(username, context):
+    if 'gulag' in context.chat_data and username in context.chat_data['gulag']['usernames']:
+        return context.chat_data['gulag']['usernames'][username]
     return None
 
 
 def beria(update, context):
     username = update.message.from_user.username
-    if username is not None and username not in gulag:
-        gulag[username] = update.message.from_user
+    id = update.message.from_user.id
+    if 'gulag' not in context.chat_data:
+        beria_postroy_gulag(context)
+    if username is not None and username not in context.chat_data['gulag']['usernames']:
+        context.chat_data['gulag']['usernames'][username] = update.message.from_user
+    context.chat_data['gulag']['ids'][id] = 1
 
 
 def totah(update, context):
@@ -50,28 +65,54 @@ def totah_command(update, context):
     if len(context.args) >= 1:
         totah_level = int(context.args[0])
 
-    apply_totah_level(totah_level, update.message.from_user, update, context)
+    apply_totah_level(totah_level, update.message.from_user, update.message, context)
 
 
-def get_totah_shel_aba(message):
+def get_totah_shel_aba(message, context):
     for e in message.entities:
         if e.type == MessageEntity.TEXT_MENTION:
             return e.user
         if e.type == MessageEntity.MENTION:
             username = message.parse_entity(e)[1:]  # remove @ in front of username
-            return beria_who_is_this_spy(username)
+            return beria_who_is_this_spy(username, context)
 
     return None
 
 
+def totah_sheli_end_poll(context):
+    job = context.job
+
+    poll = context.bot.stop_poll(job.context['poll_message'].chat_id, job.context['poll_message'].message_id)
+    if poll is not None:
+        podonki = poll.options[0].voter_count + poll.options[1].voter_count
+        bratva = job.context['user_count']
+        if podonki > bratva/2:
+            apply_totah_level(DEFAULT_TOTAH_LEVEL, job.context['user'], job.context['poll_message'], context, additional_text='Tak решили {0} подонков из {1}!'.format(podonki, bratva))
+    else:
+        job.context['poll_message'].reply_text('Демократии конец, и ты сосёшь хуец!')
+
+
 def totah_sheli_command(update, context):
-    mi_totah_shel_aba = get_totah_shel_aba(update.message)
+    mi_totah_shel_aba = get_totah_shel_aba(update.message, context)
 
     if mi_totah_shel_aba is None:
         update.message.reply_text("Я не понял, а кто тотах то?")
         return
 
-    apply_totah_level(DEFAULT_TOTAH_LEVEL, mi_totah_shel_aba, update, context)
+    question = "Заебались ли вы от " + mir_dolzhen_znat_geroev(mi_totah_shel_aba) + "?"
+    poll_message = context.bot.send_poll(update.message.chat_id, question, ["Канешна!", "Давно пора!"])
+    if poll_message is not None:
+        if 'job' in context.chat_data:
+            old_job = context.chat_data['job']
+            old_job.schedule_removal()
+        due = datetime.datetime.utcnow() + datetime.timedelta(minutes=POLL_TIME)
+        new_job = context.job_queue.run_once(totah_sheli_end_poll, due, context={'poll_message': poll_message, 'user': mi_totah_shel_aba, 'user_count': beria_how_many_spies(context)})
+        context.chat_data['job'] = new_job
+
+
+def totah_sheli_poll_update(update, context):
+    # no chat_id or chat_data available here
+    return None
 
 
 def get_totah_permissions():
@@ -85,23 +126,27 @@ def get_totah_permissions():
                            can_pin_messages=False)
 
 
-def apply_totah_level(totah_level, user, update, context):
-    if totah_level < 1:
-        totah_level = DEFAULT_TOTAH_LEVEL
-
-    until = datetime.datetime.utcnow() + datetime.timedelta(minutes=totah_level)
-
-    permissions = get_totah_permissions()
-
+def mir_dolzhen_znat_geroev(user):
     name = user.first_name
     if user.username is not None:
         name += ' "' + user.username + '"'
     if user.last_name is not None:
         name += " " + user.last_name
+    return name
 
-    update.message.reply_text('{0} будет тотахом аж на {1}!'.format(name, totah_level))
 
-    context.bot.restrict_chat_member(update.message.chat_id, user.id, permissions, until_date=until)
+def apply_totah_level(totah_level, user, message, context, additional_text=None):
+    if totah_level < 1:
+        totah_level = DEFAULT_TOTAH_LEVEL
+
+    until = datetime.datetime.utcnow() + datetime.timedelta(minutes=totah_level)
+    permissions = get_totah_permissions()
+    name = mir_dolzhen_znat_geroev(user)
+    text = '{0} будет тотахом аж на {1}!'.format(name, totah_level)
+    if additional_text is not None:
+        text += "\n" + additional_text
+    message.reply_text(text)
+    context.bot.restrict_chat_member(message.chat_id, user.id, permissions, until_date=until)
 
 
 def error(update, context):
@@ -114,7 +159,7 @@ def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    updater = Updater("<secret-token>", use_context=True)
+    updater = Updater(sys.argv[1], use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -125,7 +170,8 @@ def main():
     dp.add_handler(CommandHandler("totah", totah_command))
     dp.add_handler(CommandHandler("totahsheli", totah_sheli_command))
 
-    # handle text messages
+    # handle messages
+    dp.add_handler(PollHandler(totah_sheli_poll_update))
     dp.add_handler(MessageHandler(Filters.regex(re.compile(r'курцер', re.IGNORECASE)), totah))
     dp.add_handler(MessageHandler(Filters.text, beria))
 
