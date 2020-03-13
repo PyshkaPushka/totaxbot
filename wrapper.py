@@ -8,7 +8,7 @@ if  len(sys.argv) > 2 :
     filename=sys.argv[1]
     token=sys.argv[2]
 else:
-    print ('Please, specify a file name to run and a Bot API token')
+    print ('Please specify a file name to run and a Bot API token')
     sys.exit()
     
 
