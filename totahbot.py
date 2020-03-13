@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import logging
-import datetime
+import logging, datetime, re
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram import ChatPermissions
@@ -12,6 +11,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
+
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -26,20 +26,22 @@ def help(update, context):
 
 
 def totah(update, context):
-    if any(text in update.message.text for text in ["Курцер", "курцер"]):
-      update.message.reply_text("Курцер тотах!")
+    update.message.reply_text("Курцер тотах!")
 
 
 def totah_command(update, context):
     totah_level = 0
-
     if len(context.args) >= 1:
         totah_level = int(context.args[0])
 
+    totah_apply_level(totah_level, update, context)
+
+
+def totah_apply_level(totah_level, update, context):
     if totah_level < 1:
         totah_level = 60
 
-    until = datetime.datetime.utcnow() + datetime.timedelta(minutes = totah_level)
+    until = datetime.datetime.utcnow() + datetime.timedelta(minutes=totah_level)
 
     permissions = ChatPermissions(can_send_messages=False,
                                   can_change_info=False,
@@ -50,7 +52,9 @@ def totah_command(update, context):
                                   can_add_web_page_previews=False,
                                   can_pin_messages=False)
 
-    user = update.message.from_user.first_name + (update.message.from_user.last_name if update.message.from_user.last_name != None else "")
+    user = update.message.from_user.first_name
+    if update.message.from_user.last_name is not None:
+        user += " " + update.message.from_user.last_name
 
     update.message.reply_text('{0} будет тотахом аж на {1}!'.format(user, totah_level))
 
@@ -78,7 +82,7 @@ def main():
     dp.add_handler(CommandHandler("totah", totah_command))
 
     # handle text messages
-    dp.add_handler(MessageHandler(Filters.text, totah))
+    dp.add_handler(MessageHandler(Filters.regex(re.compile(r'курцер', re.IGNORECASE)), totah))
 
     # log all errors
     dp.add_error_handler(error)
