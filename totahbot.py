@@ -101,8 +101,9 @@ def totah_sheli_end_poll(context):
     if poll is not None:
         podonki = poll.options[0].voter_count + poll.options[1].voter_count
         bratva = user_count
-        if podonki > bratva/2:
-            apply_totah_level(DEFAULT_TOTAH_LEVEL, user, poll_message, context, additional_text='Tak решили {0} подонков из {1}!'.format(podonki, bratva))
+        if podonki > bratva / 2:
+            apply_totah_level(DEFAULT_TOTAH_LEVEL, user, poll_message, context,
+                              additional_text='Tak решили {0} подонков из {1}!'.format(podonki, bratva))
     else:
         poll_message.reply_text('Демократии конец, и ты сосёшь хуец!')
 
@@ -123,7 +124,9 @@ def totah_sheli_command(update, context):
             old_job = context.chat_data['job']
             old_job.schedule_removal()
         due = datetime.datetime.utcnow() + datetime.timedelta(minutes=POLL_TIME)
-        new_job = context.job_queue.run_once(totah_sheli_end_poll, due, context={'poll_message': poll_message, 'user': mi_totah_shel_aba, 'user_count': beria_how_many_spies(context)})
+        new_job = context.job_queue.run_once(totah_sheli_end_poll, due,
+                                             context={'poll_message': poll_message, 'user': mi_totah_shel_aba,
+                                                      'user_count': beria_how_many_spies(context)})
         context.chat_data['job'] = new_job
 
 
