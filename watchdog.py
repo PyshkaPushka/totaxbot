@@ -13,8 +13,6 @@ else:
     print ('Please specify a file name to run and a Bot API token')
     sys.exit()
     
-
-
 p=Popen(['python3', filename, token])
 
 for changes in watch('./'):
@@ -25,8 +23,9 @@ for changes in watch('./'):
       try:
         p.wait(timeout=10)
       except subprocess.TimeoutExpired:
-          print("The process is still alive.Kill him!")
-          p.kill()
+        print("The process is still alive, kill it!")
+        p.kill()
+        p.wait()
       time.sleep(5) 
       print("stoped")
-      p=Popen(['python3', filename,token])
+      p=Popen(['python3', filename, token])
