@@ -21,11 +21,7 @@ logger = logging.getLogger(__name__)
 # context. Error handlers also receive the raised TelegramError object in error.
 def start(update, context):
     """Send a message when the command /start is issued."""
-<<<<<<< HEAD
-    update.message.reply_text('Hi!')
-=======
     update.message.reply_text('Категорически приветсвую!')
->>>>>>> master
 
 
 def help(update, context):
@@ -82,8 +78,6 @@ def get_totah_shel_aba(message, context):
 
     return None
 
-<<<<<<< HEAD
-=======
 
 def totah_sheli_end_poll(context):
     job = context.job
@@ -157,7 +151,6 @@ def apply_totah_level(totah_level, user, message, context, additional_text=None)
     logger.debug('restrict: chat_id: "%s" user: "%s"', message.chat_id, user.id)
     context.bot.restrict_chat_member(message.chat_id, user.id, permissions, until_date=until)
 
->>>>>>> master
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -177,12 +170,6 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
-<<<<<<< HEAD
-
-    # on noncommand i.e message - echo the message on Telegram
-    dp.add_handler(MessageHandler(Filters.text, totah))
-
-=======
     dp.add_handler(CommandHandler("totah", totah_command))
     dp.add_handler(CommandHandler("totahsheli", totah_sheli_command))
 
@@ -191,7 +178,6 @@ def main():
     dp.add_handler(MessageHandler(Filters.regex(re.compile(r'курцер', re.IGNORECASE)), totah))
     dp.add_handler(MessageHandler(Filters.text, beria))
 
->>>>>>> master
     # log all errors
     dp.add_error_handler(error)
 
@@ -205,8 +191,4 @@ def main():
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
     main()
-=======
-    main()
->>>>>>> master
