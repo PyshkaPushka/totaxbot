@@ -19,9 +19,12 @@ def find_console_id(content):
 
 pythonanywhere_key= os.environ['PYTHON_API_KEY']
 file_path=os.environ['FILE_PATH'] 
+pythonanywhere_user=os.environ['PYTHON_USERNAME']
+pythonanywhere_target=os.environ['TARGET_PATH'] 
 
-url = "https://www.pythonanywhere.com/api/v0/user/totahbot/files/path/home/totahbot/dev/devbot.py"
 
+url = "https://www.pythonanywhere.com/api/v0/user/"+pythonanywhere_user+"/files/path/home/"+pythonanywhere_user+pythonanywhere_target
+print(url)
 payload = {}
 file = open(file_path,'rb')
 
