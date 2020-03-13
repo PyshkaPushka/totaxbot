@@ -3,6 +3,8 @@ import time
 import sys
 from watchgod import watch
 from subprocess import Popen
+import subprocess
+
 
 if  len(sys.argv) > 2 :
     filename=sys.argv[1]
