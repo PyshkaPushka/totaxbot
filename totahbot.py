@@ -99,6 +99,8 @@ def totah_sheli_command(update, context):
         update.message.reply_text("Я не понял, а кто тотах то?")
         return
 
+    logger.debug('totah_sheli: user: "%s"', mi_totah_shel_aba)
+
     question = "Заебались ли вы от " + mir_dolzhen_znat_geroev(mi_totah_shel_aba) + "?"
     poll_message = context.bot.send_poll(update.message.chat_id, question, ["Канешна!", "Давно пора!"])
     if poll_message is not None:
@@ -146,6 +148,7 @@ def apply_totah_level(totah_level, user, message, context, additional_text=None)
     if additional_text is not None:
         text += "\n" + additional_text
     message.reply_text(text)
+    logger.debug('restrict: chat_id: "%s" user: "%s"', message.chat_id, user.id)
     context.bot.restrict_chat_member(message.chat_id, user.id, permissions, until_date=until)
 
 
