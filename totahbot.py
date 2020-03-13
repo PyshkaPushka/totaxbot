@@ -26,7 +26,10 @@ def start(update, context):
 
 def help(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('Можешь попробовать:\n\t/totah <сколько балов>\n\t/totahsheli <@ми тотах шель аба>\n')
+    update.message.reply_text("""Можешь попробовать:
+\t/totah <сколько балов>
+\t/totahsheli <@ми тотах шель аба>
+\t/totahsheli Ja""")
 
 
 def beria_postroy_gulag(context):
@@ -69,6 +72,10 @@ def totah_command(update, context):
 
 
 def get_totah_shel_aba(message, context):
+    if len(context.args) >= 1:
+        if context.args[0].lower() == "ja":
+            return message.from_user
+
     for e in message.entities:
         if e.type == MessageEntity.TEXT_MENTION:
             return e.user
