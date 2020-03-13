@@ -30,7 +30,7 @@ file = open(file_path,'rb')
 
 
 headers = {
-  'Authorization': 'Token {pythonanywhere_key}'.format(pythonanywhere_key=pythonanywhere_key)
+  'Authorization': 'Token {0}'.format(pythonanywhere_key)
 }
 
 response = requests.request("POST", url, headers=headers, data = payload, files = {'content': file})
