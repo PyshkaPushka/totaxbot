@@ -1,30 +1,39 @@
 #!/usr/bin/env python
-import time
-import sys
-from watchgod import watch
-from subprocess import Popen
-import subprocess
+import time, sys, os.path
+from subprocess import Popen, TimeoutExpired
 
 if len(sys.argv) > 2:
     filename = sys.argv[1]
-    token = sys.argv[2]
+    update_mark = sys.argv[2]
 else:
-    print('Please specify a file name to run and a Bot API token')
+    print('Arguments: <PyProgram> <UpdateMarkFileName>')
     sys.exit()
 
-p = Popen(['python3', filename, token])
 
-for changes in watch('./'):
-    print(changes)
-    if any(['./' + filename in i for i in changes]):
-        print("stoping!")
+def run_python():
+    print("Starting")
+    return Popen(['python3', filename])
+
+
+def check_for_update(p):
+    if os.path.isfile(update_mark):
+        print("Update exists")
+        os.remove(update_mark)
+        print("Stopping!")
         p.terminate()
         try:
             p.wait(timeout=10)
-        except subprocess.TimeoutExpired:
+        except TimeoutExpired:
             print("The process is still alive, kill it!")
             p.kill()
             p.wait()
         time.sleep(5)
-        print("stoped")
-        p = Popen(['python3', filename, token])
+        print("Stopped")
+
+
+while True:
+    p = run_python()
+
+    while p.poll() is None:
+        check_for_update(p)
+        time.sleep(1)

@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import logging, datetime, re, sys
+import logging, datetime, re, os
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram import ChatPermissions, MessageEntity
 from pollhandler import PollHandler
 
+TOKEN = os.environ['BOT_TOKEN']
+TOTAH_REGEX = r'курцер'
 DEFAULT_TOTAH_LEVEL = 60
 POLL_TIME = 5
 
@@ -180,7 +182,7 @@ def main():
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
-    updater = Updater(sys.argv[1], use_context=True)
+    updater = Updater(TOKEN, use_context=True)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -193,7 +195,7 @@ def main():
 
     # handle messages
     dp.add_handler(PollHandler(totah_sheli_poll_update))
-    dp.add_handler(MessageHandler(Filters.regex(re.compile(r'курцер', re.IGNORECASE)), totah))
+    dp.add_handler(MessageHandler(Filters.regex(re.compile(TOTAH_REGEX, re.IGNORECASE)), totah))
     dp.add_handler(MessageHandler(Filters.text, beria))
 
     # log all errors
