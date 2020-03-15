@@ -1,5 +1,9 @@
 # CI script
 
+Prerequisites:
+
+    $ pip3 install requests
+
 In order to use the script you must set the following env variables:
 - FILE_PATH - full path to file you would like to upload to pythonanywhere.com
 - PYTHON_API_KEY - API key to access pythonanywhere.com

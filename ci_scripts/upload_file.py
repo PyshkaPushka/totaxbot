@@ -1,20 +1,6 @@
 import requests
 import os
 
-
-def find_console_id(content):
-    console_id = ""
-    if isinstance(content, list):
-        for d in content:
-            for k, v in d.items():
-                if k == 'id':
-                    console_id = v
-    elif isinstance(content, dict):
-        console_id = content.get("id")
-
-    return console_id
-
-
 pythonanywhere_key = os.environ['PYTHON_API_KEY']
 file_path = os.environ['FILE_PATH']
 pythonanywhere_user = os.environ['PYTHON_USERNAME']
