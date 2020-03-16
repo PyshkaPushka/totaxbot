@@ -1,20 +1,26 @@
-import requests
-import os
+import sys, os, requests
 
-pythonanywhere_key = os.environ['PYTHON_API_KEY']
-file_path = os.environ['FILE_PATH']
-pythonanywhere_user = os.environ['PYTHON_USERNAME']
-pythonanywhere_target = os.environ['TARGET_PATH']
+BASE_URL = "https://www.pythonanywhere.com/api/v0"
 
-url = "https://www.pythonanywhere.com/api/v0/user/" + pythonanywhere_user + "/files/path/home/" + pythonanywhere_user + pythonanywhere_target
-print(url)
+if len(sys.argv) > 2:
+    src_file_path = sys.argv[1]
+    dst_file_path = sys.argv[2]
+else:
+    print('Arguments: <SourceFilePath> <DestinationFilePath>')
+    sys.exit()
+
+api_key = os.environ['PYTHON_API_KEY']
+username = os.environ['PYTHON_USERNAME']
+
+url = "{base}/user/{user}/files/path/home/{user}/{dst}".format(base=BASE_URL, user=username, dst=dst_file_path)
+print("URL: ", url)
 payload = {}
-file = open(file_path, 'rb')
+file = open(src_file_path, 'rb')
 
 headers = {
-    'Authorization': 'Token {0}'.format(pythonanywhere_key)
+    'Authorization': 'Token {0}'.format(api_key)
 }
 
 response = requests.request("POST", url, headers=headers, data=payload, files={'content': file})
 
-print(response.content)
+print("Response: ", response.content)
