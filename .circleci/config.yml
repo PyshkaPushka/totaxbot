@@ -9,6 +9,7 @@ jobs:
       - run: export PYTHON_API_KEY=$PYTHON_DEV_API_KEY
       - run: export PYTHON_USERNAME=$PYTON_DEV_USERNAME
       - run: pwd
+      - run: ll
       - run: python3 ./ci_scripts/upload_file.py totahbot.py totahbot.py
       - run: touch .botupdate
       - run: python3 ./ci_scripts/upload_file.py .botupdate .botupdate
