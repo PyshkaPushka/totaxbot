@@ -8,13 +8,13 @@ jobs:
       - run: pip3 install requests --user
       - run: export PYTHON_API_KEY=$PYTHON_DEV_API_KEY
       - run: export PYTHON_USERNAME=$PYTON_DEV_USERNAME
-      - run: pwd
+      - run: env
       - run: ls
       - run: python3 ./ci_scripts/upload_file.py totahbot.py totahbot.py
       - run: touch .botupdate
       - run: python3 ./ci_scripts/upload_file.py .botupdate .botupdate
 workflows:
   version: 2
-  one_and_two:
+  upload_filess:
     jobs:
       - upload_files
