@@ -1,22 +1,19 @@
 version: 2
 jobs:
-  one:
+  upload_files:
     docker:
-      - image: circleci/ruby:2.4.1
+      - image: python:3.8.2
     steps:
       - checkout
-      - run: echo "A first hello"
-      - run: sleep 25
-  two:
-    docker:
-      - image: circleci/ruby:2.4.1
-    steps:
-      - checkout
-      - run: echo "A more familiar hi"
-      - run: sleep 15
+      - run: pip3 install requests --user
+      - run: export PYTHON_API_KEY=$PYTHON_DEV_API_KEY
+      - run: export PYTHON_USERNAME=$PYTON_DEV_USERNAME
+      - run: pwd
+      - run: python3 ./ci_scripts/upload_file.py totahbot.py totahbot.py
+      - run: touch .botupdate
+      - run: python3 ./ci_scripts/upload_file.py .botupdate .botupdate
 workflows:
   version: 2
   one_and_two:
     jobs:
-      - one
-      - two
+      - upload_files
