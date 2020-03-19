@@ -1,0 +1,20 @@
+version: 2
+jobs:
+  upload_files:
+    docker:
+      - image: python:3.8.2
+    steps:
+      - checkout
+      - run: echo 'export PYTHON_API_KEY=$PYTHON_DEV_API_KEY' >> $BASH_ENV 
+      - run: echo 'export PYTHON_USERNAME=$PYTHON_DEV_USERNAME' >> $BASH_ENV 
+      - run: pip3 install requests --user
+      - run: env
+      - run: ls
+      - run: python3 ./ci_scripts/upload_file.py totahbot.py totahbot.py
+      - run: touch .botupdate
+      - run: python3 ./ci_scripts/upload_file.py .botupdate .botupdate
+workflows:
+  version: 2
+  upload_filess:
+    jobs:
+      - upload_files
