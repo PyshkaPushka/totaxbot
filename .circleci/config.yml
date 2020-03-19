@@ -4,8 +4,8 @@ jobs:
     docker:
       - image: python:3.8.2
     environment:
-       PYTHON_API_KEY: $PYTHON_DEV_API_KEY
-       PYTHON_USERNAME: $PYTON_DEV_USERNAME
+       PYTHON_API_KEY: ${PYTHON_DEV_API_KEY}
+       PYTHON_USERNAME: ${PYTON_DEV_USERNAME}
     steps:
       - checkout
       - run: pip3 install requests --user
