@@ -3,11 +3,12 @@ jobs:
   upload_files:
     docker:
       - image: python:3.8.2
+    environment:
+       PYTHON_API_KEY: $PYTHON_DEV_API_KEY
+       PYTHON_USERNAME: $PYTON_DEV_USERNAME
     steps:
       - checkout
       - run: pip3 install requests --user
-      - run: export PYTHON_API_KEY=$PYTHON_DEV_API_KEY
-      - run: export PYTHON_USERNAME=$PYTON_DEV_USERNAME
       - run: env
       - run: ls
       - run: python3 ./ci_scripts/upload_file.py totahbot.py totahbot.py
