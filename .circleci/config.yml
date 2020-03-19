@@ -6,7 +6,7 @@ jobs:
     steps:
       - checkout
       - run: if [[ $CIRCLE_BRANCH == "master" ]] ; then  echo 'export PYTHON_API_KEY=$PYTHON_PROD_API_KEY' >> $BASH_ENV ; else echo 'export PYTHON_API_KEY=$PYTHON_DEV_API_KEY' >> $BASH_ENV ; fi
-      - run: if [[ $CIRCLE_BRANCH == "master" ]] ; then  echo 'export PYTHON_USERNAME=$PYTHON_PROD_USERNAME' >> $BASH_ENV ; else echo 'export PYTHON_USERNAME=$PYTHON__DEV_USERNAME' >> $BASH_ENV ; fi
+      - run: if [[ $CIRCLE_BRANCH == "master" ]] ; then  echo 'export PYTHON_USERNAME=$PYTHON_PROD_USERNAME' >> $BASH_ENV ; else echo 'export PYTHON_USERNAME=$PYTHON_DEV_USERNAME' >> $BASH_ENV ; fi
       - run: pip3 install requests --user
       - run: env
       - run: ls
