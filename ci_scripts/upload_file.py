@@ -24,3 +24,8 @@ headers = {
 response = requests.request("POST", url, headers=headers, data=payload, files={'content': file})
 
 print("Response: ", response.content)
+
+print("Status_code: ", response.status_code)
+
+if response.status_code != 200 and response.status_code !=201:
+   sys.exit(response.status_code)

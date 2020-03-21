@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  upload_files:
+    docker:
+      - image: python:3.8.2
+    steps:
+      - checkout
+      # $BASH_ENV - CircleCI uses bash to source BASH_ENV. This means that BASH_ENV is automatically loaded on every subsequent step.
+      - run: if [[ $CIRCLE_BRANCH == "master" ]]; then  echo 'export PYTHON_API_KEY=$PYTHON_PROD_API_KEY' >> $BASH_ENV; else echo 'export PYTHON_API_KEY=$PYTHON_DEV_API_KEY' >> $BASH_ENV; fi
+      - run: if [[ $CIRCLE_BRANCH == "master" ]]; then  echo 'export PYTHON_USERNAME=$PYTHON_PROD_USERNAME' >> $BASH_ENV; else echo 'export PYTHON_USERNAME=$PYTHON_DEV_USERNAME' >> $BASH_ENV; fi
+      - run: pip3 install requests --user
+      - run: env
+      - run: ls
+      - run: while read entry; do echo $entry && python3 ./ci_scripts/upload_file.py $entry; done < file_list.txt
+      - run: touch .botupdate
+      - run: python3 ./ci_scripts/upload_file.py .botupdate .botupdate
+workflows:
+  version: 2
+  upload_files:
+    jobs:
+      - upload_files
