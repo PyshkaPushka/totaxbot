@@ -11,7 +11,7 @@ jobs:
       - run: pip3 install requests --user
       - run: env
       - run: ls
-      - run: while read entry; do echo $entry && python3 ./ci_scripts/upload_file.py $entry; done < file_list.txt
+      - run: while read entry; do echo $entry && python3 ./ci_scripts/upload_file.py $entry; done < ./ci_scripts/file_list.txt
       - run: touch .botupdate
       - run: python3 ./ci_scripts/upload_file.py .botupdate .botupdate
 workflows:
